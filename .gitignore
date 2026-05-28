@@ -1,0 +1,7 @@
+.env
+__pycache__/
+*.pyc
+*.log
+rodar_bot.bat
+test_apis.py
+test_scryfall.py
