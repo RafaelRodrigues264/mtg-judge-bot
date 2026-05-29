@@ -273,8 +273,21 @@ def main() -> None:
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     app.add_handler(MessageHandler(filters.VOICE, handle_voice))
 
-    print("JudgeBot rodando! Pressione Ctrl+C para parar.")
-    app.run_polling()
+    railway_domain = os.getenv("RAILWAY_PUBLIC_DOMAIN")
+    port = int(os.getenv("PORT", 8080))
+
+    if railway_domain:
+        webhook_url = f"https://{railway_domain}/{telegram_token}"
+        print(f"JudgeBot iniciando com webhook em {railway_domain}")
+        app.run_webhook(
+            listen="0.0.0.0",
+            port=port,
+            url_path=telegram_token,
+            webhook_url=webhook_url,
+        )
+    else:
+        print("JudgeBot rodando localmente (polling)...")
+        app.run_polling()
 
 
 if __name__ == "__main__":
